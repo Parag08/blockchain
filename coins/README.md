@@ -3,7 +3,7 @@
 <B>setup</B>:  
 pip install flask   
 git clone https://github.com/Parag08/blockchain.git     
-cd blockchain   
+cd blockchain/coins/   
 mkdir data  
 
 <B>to run</B>:
