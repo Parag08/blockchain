@@ -2,6 +2,7 @@ import hashlib
 import csv
 import time
 import requests, json
+import datetime
 
 block_chain_manager_url = "http://127.0.0.1:9000/manager/"
 
@@ -56,7 +57,7 @@ class Transaction:
         self.port =  personReciving.split(':')[1]
         self.amount = amount
         self.status = False
-        self.timestamp = time.strftime("%d-%m-%Y-%H-%M-%S.%f")
+        self.timestamp = datetime.datetime.now().strftime("%d-%m-%Y-%H-%M-%S.%f")
         self.send_block_chain_manager()
     def send_block_chain_manager(self):
         url = block_chain_manager_url

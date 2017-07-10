@@ -6,6 +6,7 @@ import time
 import sys
 import requests, json
 import os
+import datetime
 
 app = Flask(__name__)
 
@@ -41,7 +42,7 @@ def intialise():
 def transactions():
     url = "http://127.0.0.1:"+request.json['port']+"/"+request.json["personReciving"]+"/"
     headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8'}
-    payload = {"timestamp":time.strftime("%d-%m-%Y-%H-%M-%S.%f"),"amount":request.json["amount"]}
+    payload = {"timestamp":datetime.datetime.now().strftime("%d-%m-%Y-%H-%M-%S.%f"),"amount":request.json["amount"]}
     response =  requests.post(url, data=json.dumps(payload), headers=headers)
     if int(response.status_code) == 200:
         transactions_array.append(request.json)
@@ -67,14 +68,3 @@ if __name__ == "__main__":
     app.run(
             port=9000
     )
-    '''
-    thread = threading.Thread(target=runServer)
-    thread.daemon = True
-    thread.start()
-    last_block_creation_time = time.time()
-    while True:
-        if time.time() - last_block_creation_time >= 50:
-            date = time.strftime("%d-%m-%Y-%H-%M")
-            filename = './data/'+date + '_transaction.csv'
-            if os.path.isfile(filename):
-    '''
