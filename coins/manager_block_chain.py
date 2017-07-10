@@ -40,11 +40,9 @@ def intialise():
 @app.route("/manager/",methods=['POST'])
 def transactions():
     url = "http://127.0.0.1:"+request.json['port']+"/"+request.json["personReciving"]+"/"
-    print url
     headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8'}
     payload = {"timestamp":time.strftime("%d-%m-%Y-%H-%M-%S.%f"),"amount":request.json["amount"]}
     response =  requests.post(url, data=json.dumps(payload), headers=headers)
-    print response,response.status_code
     if int(response.status_code) == 200:
         transactions_array.append(request.json)
         if len(transactions_array) == 10:
