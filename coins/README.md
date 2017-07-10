@@ -1,8 +1,8 @@
 <h1>A very basic example of blockchain working</h1>
 
-<B>setup</B>:
-pip install flask 
-git clone https://github.com/Parag08/blockchain.git  
+<B>setup</B>:  
+pip install flask   
+git clone https://github.com/Parag08/blockchain.git     
 cd blockchain   
 mkdir data  
 
