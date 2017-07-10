@@ -1,8 +1,9 @@
 import hashlib
 import csv
 import time
+import requests, json
 
-block_chain_manager_url = "localhost:9000/manager/"
+block_chain_manager_url = "http://127.0.0.1:9000/manager/"
 
 def chunks(l, n):
     """Yield successive n-sized chunks from l."""
@@ -50,11 +51,11 @@ class Account:
 
 class Transaction:
     def __init__(self,personSending,personReciving,amount):
-        self.csv_file = get_csv_file()
         self.personSending = personSending
         self.personReciving = personReciving.split(':')[0]
         self.port =  personReciving.split(':')[1]
         self.amount = amount
+        self.status = False
         self.timestamp = time.strftime("%d-%m-%Y-%H-%M-%S.%f")
         self.send_block_chain_manager()
     def send_block_chain_manager(self):
@@ -64,29 +65,25 @@ class Transaction:
         payload = {"timestamp":self.timestamp,"amount":self.amount,"personSending":self.personSending,"personReciving":self.personReciving,"transaction_id":transaction_id,"port":self.port}
         headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8'}
         response =  requests.post(url, data=json.dumps(payload), headers=headers)
-        if int(response.status_code) == 200:
+        print response.content,type(response.content)
+        response = json.loads(response.content)
+        if int(response["status_code"]) == 200:
             self.status = True
         else:
             self.error = "manager server not found"
-    def write_to_file(self):
-        writer = csv.writer(self.csv_file)
-        transaction_array = [self.personSending,self.personReciving,self.amount]
-        transaction_id =  hashlib.sha256(str(transaction_array)).hexdigest()
-        transaction_array.append(transaction_id)
-        writer.writerow(transaction_array)
-        self.csv_file.close()
 
 
 class Block:
     def __init__(self,data,previous_block):
         self.previous_block = previous_block
         self.data = data
+        self.header = {}
     def create_header(self):
         self.markel_root = calculate_markel_root(self.data)
         self.header = {"markel_root":self.markel_root,"previous_block":self.previous_block}
-        self.blockhash = hashlib.sha256(json.dumps(header)).hexdigest()
-        header["blockhash"] = self.blockhash
-        return header
+        self.blockhash = hashlib.sha256(json.dumps(self.header)).hexdigest()
+        self.header["blockhash"] = self.blockhash
+        return self.header
 
 
 def test_everthing():

@@ -8,7 +8,8 @@ import requests, json
 
 
 
-my_account = account.Account('person_1')
+my_account = account.Account('person_2')
+my_account.port = 9502
 
 app = Flask(__name__)
 
@@ -38,6 +39,7 @@ if __name__ == "__main__":
     thread = threading.Thread(target=runFlaskserver)
     thread.daemon = True
     thread.start()
+    #register_to_network()
     while True:
         input_string = raw_input("What do you want to do(send/exit/show):")
         if input_string == "send":
